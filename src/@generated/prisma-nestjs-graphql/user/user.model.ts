@@ -4,28 +4,26 @@ import { ID } from '@nestjs/graphql';
 
 @ObjectType()
 export class User {
-  @Field(() => ID, { nullable: false })
-  id!: string;
 
-  @Field(() => String, { nullable: false })
-  email!: string;
+    @Field(() => ID, {nullable:false})
+    id!: string;
 
-  @Field(() => String, { nullable: false })
-  username!: string;
+    @Field(() => String, {nullable:false})
+    email!: string;
 
-  /** Validator.IsNumberString() */
-  @Field(() => String, {
-    nullable: false,
-    description: 'Validator.IsNumberString()',
-  })
-  staffId!: string;
+    @Field(() => String, {nullable:false})
+    username!: string;
 
-  @Field(() => String, { nullable: false })
-  password!: string;
+    /** Validator.IsNumberString() */
+    @Field(() => String, {nullable:false,description:'Validator.IsNumberString()'})
+    staffId!: string;
 
-  @Field(() => Date, { nullable: false })
-  createdAt!: Date;
+    @Field(() => String, {nullable:false})
+    password!: string;
 
-  @Field(() => Date, { nullable: false })
-  updatedAt!: Date;
+    @Field(() => Date, {nullable:false})
+    createdAt!: Date;
+
+    @Field(() => Date, {nullable:false})
+    updatedAt!: Date;
 }

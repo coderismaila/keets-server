@@ -1,6 +1,7 @@
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { UserService } from './user.service';
 import { Prisma } from '.prisma/client';
+import { OrderByParams, UpdateUserInput } from 'src/graphql';
 import { UserCreateInput } from 'src/@generated/prisma-nestjs-graphql/user/user-create.input';
 
 @Resolver('User')
@@ -14,14 +15,8 @@ export class UserResolver {
 
   @Query('users')
   findAllUser(
-    @Args('params')
-    params: {
-      skip?: number;
-      take?: number;
-      cursor?: Prisma.UserWhereUniqueInput;
-      where?: Prisma.UserWhereInput;
-      orderBy?: Prisma.UserOrderByWithRelationInput;
-    } = {},
+    @Args('orderBy')
+    params?: OrderByParams,
   ) {
     return this.userService.getAllUser(params);
   }
@@ -48,12 +43,10 @@ export class UserResolver {
 
   @Mutation('updateUser')
   update(
-    @Args('params')
-    params: {
-      where: Prisma.UserWhereUniqueInput;
-      data: Prisma.UserUpdateInput;
-    },
+    @Args('updateUserInput')
+    params: UpdateUserInput,
   ) {
+    console.log('params', params);
     return this.userService.updateUser(params);
   }
 

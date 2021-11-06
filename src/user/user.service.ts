@@ -1,48 +1,38 @@
 import { Prisma, User } from '@prisma/client';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
+import { OrderByParams, UpdateUserInput } from '../graphql';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly prsimaService: PrismaService) {}
+  constructor(private readonly prismaService: PrismaService) {}
 
   async createUser(data: Prisma.UserCreateInput): Promise<User> {
-    return this.prsimaService.user.create({ data });
+    return this.prismaService.user.create({ data });
   }
 
-  async getAllUser(params: {
-    skip?: number;
-    take?: number;
-    cursor?: Prisma.UserWhereUniqueInput;
-    where?: Prisma.UserWhereInput;
-    orderBy?: Prisma.UserOrderByWithRelationInput;
-  }): Promise<User[]> {
-    const { skip, take, cursor, where, orderBy } = params;
-    return this.prsimaService.user.findMany({
-      skip,
-      take,
-      cursor,
-      where,
-      orderBy,
+  async getAllUser(orderBy: OrderByParams): Promise<User[]> {
+    const { field = 'createdAt', direction = 'desc' } = orderBy || {};
+    return this.prismaService.user.findMany({
+      orderBy: { [field]: direction },
     });
   }
 
-  getUser(
+  async getUser(
     userWhereUniqueInput: Prisma.UserWhereUniqueInput,
   ): Promise<User | null> {
-    return this.prsimaService.user.findUnique({ where: userWhereUniqueInput });
+    return this.prismaService.user.findUnique({ where: userWhereUniqueInput });
   }
 
-  updateUser(params: {
-    where: Prisma.UserWhereUniqueInput;
-    data: Prisma.UserUpdateInput;
-  }): Promise<User> {
-    const { where, data } = params;
-    return this.prsimaService.user.update({ where, data });
+  async updateUser(params: UpdateUserInput): Promise<User> {
+    return this.prismaService.user.update({
+      where: { id: params.id },
+      data: params,
+    });
   }
 
   async deleteUser(where: Prisma.UserWhereUniqueInput): Promise<User> {
-    return this.prsimaService.user.delete({
+    return this.prismaService.user.delete({
       where,
     });
   }

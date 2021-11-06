@@ -32,7 +32,7 @@ export class User {
     username: string;
     email: string;
     staffId: string;
-    password: string;
+    password?: Nullable<string>;
     createdAt?: Nullable<DateTime>;
 }
 
