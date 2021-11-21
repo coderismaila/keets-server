@@ -35,6 +35,7 @@ type Query {
   userByEmail(email: String!): User
   userByUsername(username: String!): User
   userByStaffId(staffId: String!): User
+  currentUser(user: UpdateUserInput): User
 }
 
 type Mutation {

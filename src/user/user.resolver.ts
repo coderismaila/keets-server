@@ -1,19 +1,28 @@
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { UserService } from './user.service';
 import { Prisma } from '.prisma/client';
-import { OrderByParams, UpdateUserInput } from 'src/graphql';
-import { UserCreateInput } from 'src/@generated/prisma-nestjs-graphql/user/user-create.input';
+import {
+  CreateUserInput,
+  OrderByParams,
+  UpdateUserInput,
+  User,
+} from 'src/graphql';
+
+import { UseGuards } from '@nestjs/common';
+import { GqlAuthGuard } from 'src/auth/guards/gql-auth.guard';
+import { CurrentUser } from 'src/utils/current-user.decorator';
 
 @Resolver('User')
 export class UserResolver {
   constructor(private readonly userService: UserService) {}
 
   @Mutation('createUser')
-  createUser(@Args('createUserInput') createUserInput: UserCreateInput) {
+  createUser(@Args('createUserInput') createUserInput: CreateUserInput) {
     return this.userService.createUser(createUserInput);
   }
 
   @Query('users')
+  @UseGuards(GqlAuthGuard)
   findAllUser(
     @Args('orderBy')
     params?: OrderByParams,
@@ -39,6 +48,13 @@ export class UserResolver {
   @Query('userByStaffId')
   findUserByStaffId(@Args('staffId') staffId: string) {
     return this.userService.getUser({ staffId });
+  }
+
+  @Query()
+  @UseGuards(GqlAuthGuard)
+  currentUser(@CurrentUser() user: User) {
+    const id = user.id;
+    return this.userService.getUser({ id });
   }
 
   @Mutation('updateUser')
