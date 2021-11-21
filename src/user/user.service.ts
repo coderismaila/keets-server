@@ -73,9 +73,15 @@ export class UserService {
     });
   }
 
-  async deleteUser(where: Prisma.UserWhereUniqueInput): Promise<User> {
+  async deleteUser(id: string): Promise<User> {
+    const user = await this.getUser({ id });
+
+    if (!user) throw new BadRequestException('invalid user');
+
     return this.prismaService.user.delete({
-      where,
+      where: { id },
     });
+
+    return user;
   }
 }

@@ -6,6 +6,7 @@ type User {
   email: String!
   staffId: String!
   password: String
+  role: Role
   createdAt: DateTime
 }
 
@@ -14,6 +15,7 @@ input CreateUserInput {
   email: String!
   staffId: String!
   password: String!
+  role: Role
 }
 
 input UpdateUserInput {
@@ -22,6 +24,7 @@ input UpdateUserInput {
   email: String
   staffId: String
   password: String
+  role: Role
 }
 
 input OrderByParams {
@@ -42,4 +45,11 @@ type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   deleteUser(id: ID!): User
+}
+
+enum Role {
+  Super
+  Admin
+  Mod
+  User
 }

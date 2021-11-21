@@ -1,9 +1,9 @@
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { UserService } from './user.service';
-import { Prisma } from '.prisma/client';
 import {
   CreateUserInput,
   OrderByParams,
+  Role,
   UpdateUserInput,
   User,
 } from 'src/graphql';
@@ -11,8 +11,11 @@ import {
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from 'src/auth/guards/gql-auth.guard';
 import { CurrentUser } from 'src/utils/current-user.decorator';
+import { Roles } from 'src/auth/decorator/role.decorator';
+import { RolesGuard } from 'src/auth/guards/role.guard';
 
 @Resolver('User')
+@UseGuards(GqlAuthGuard, RolesGuard)
 export class UserResolver {
   constructor(private readonly userService: UserService) {}
 
@@ -22,7 +25,6 @@ export class UserResolver {
   }
 
   @Query('users')
-  @UseGuards(GqlAuthGuard)
   findAllUser(
     @Args('orderBy')
     params?: OrderByParams,
@@ -51,7 +53,6 @@ export class UserResolver {
   }
 
   @Query()
-  @UseGuards(GqlAuthGuard)
   currentUser(@CurrentUser() user: User) {
     const id = user.id;
     return this.userService.getUser({ id });
@@ -67,7 +68,8 @@ export class UserResolver {
   }
 
   @Mutation('deleteUser')
-  remove(@Args('id') id: Prisma.UserWhereUniqueInput) {
+  @Roles(Role.Super, Role.Admin)
+  remove(@Args('id') id: string) {
     return this.userService.deleteUser(id);
   }
 }

@@ -7,6 +7,13 @@
 
 /* tslint:disable */
 /* eslint-disable */
+export enum Role {
+    Super = "Super",
+    Admin = "Admin",
+    Mod = "Mod",
+    User = "User"
+}
+
 export class LoginInput {
     email?: Nullable<string>;
     username?: Nullable<string>;
@@ -26,6 +33,7 @@ export class CreateUserInput {
     email: string;
     staffId: string;
     password: string;
+    role?: Nullable<Role>;
 }
 
 export class UpdateUserInput {
@@ -34,6 +42,7 @@ export class UpdateUserInput {
     email?: Nullable<string>;
     staffId?: Nullable<string>;
     password?: Nullable<string>;
+    role?: Nullable<Role>;
 }
 
 export class OrderByParams {
@@ -68,6 +77,7 @@ export class User {
     email: string;
     staffId: string;
     password?: Nullable<string>;
+    role?: Nullable<Role>;
     createdAt?: Nullable<DateTime>;
 }
 

@@ -1,7 +1,7 @@
+import { User } from '.prisma/client';
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { User } from 'src/graphql';
 
 import { UserService } from 'src/user/user.service';
 import { jwtConstants } from '../constants';
@@ -20,7 +20,6 @@ export class JWTStrategy extends PassportStrategy(Strategy) {
     username: string;
     sub: string;
   }): Promise<User | null> {
-    // return { userId: payload.sub, username: payload.username };
     return this.userService.getUser({ username: payload.username });
   }
 }
