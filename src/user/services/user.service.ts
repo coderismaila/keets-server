@@ -6,7 +6,7 @@ import {
   LoginInput,
   OrderByParams,
   UpdateUserInput,
-} from '../graphql';
+} from '../../graphql';
 import { hashPassword } from 'src/utils/password.bcrypt';
 
 @Injectable()
@@ -67,6 +67,7 @@ export class UserService {
   }
 
   async updateUser(updateUserInput: UpdateUserInput): Promise<User> {
+    // const { id, ...rest } = updateUserInput;
     return this.prismaService.user.update({
       where: { id: updateUserInput.id },
       data: updateUserInput,

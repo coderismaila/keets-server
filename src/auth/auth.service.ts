@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { LoginInput, SignUpInput } from 'src/graphql';
-import { UserService } from 'src/user/user.service';
+import { UserService } from 'src/user/services/user.service';
 import { comparePassword } from 'src/utils/password.bcrypt';
 
 @Injectable()

@@ -7,7 +7,31 @@ type User {
   staffId: String!
   password: String
   role: Role
+  firstName: String
+  lastName: String
+  middleName: String
+  designationId: String
+  designation: Designation
+  areaOfficeId: String
+  areaOffice: AreaOffice
+  phoneNumber: String
   createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type AreaOffice {
+  id: ID!
+  name: String!
+  nercCode: String!
+  kaedcoCode: String!
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type Designation {
+  id: ID!
+  name: String!
+  description: String
 }
 
 input CreateUserInput {
@@ -16,6 +40,12 @@ input CreateUserInput {
   staffId: String!
   password: String!
   role: Role
+  firstName: String
+  lastName: String
+  middleName: String
+  designationId: String
+  areaOfficeId: String
+  phoneNumber: String
 }
 
 input UpdateUserInput {
@@ -25,6 +55,40 @@ input UpdateUserInput {
   staffId: String
   password: String
   role: Role
+  firstName: String
+  lastName: String
+  middleName: String
+  areaOfficeId: String
+  designationId: String
+  phoneNumber: String
+}
+
+input CreateAreaOfficeInput {
+  name: String!
+  nercCode: String!
+  kaedcoCode: String!
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input UpdateAreaOfficeInput {
+  id: ID!
+  name: String
+  nercCode: String
+  kaedcoCode: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input CreateDesignationInput {
+  name: String!
+  description: String
+}
+
+input UpdateDesignationInput {
+  id: ID!
+  name: String
+  description: String
 }
 
 input OrderByParams {
@@ -39,12 +103,18 @@ type Query {
   userByUsername(username: String!): User
   userByStaffId(staffId: String!): User
   currentUser(user: UpdateUserInput): User
+  areaOffices(orderBy: OrderByParams): [AreaOffice]
+  designations(orderBy: OrderByParams): [Designation]
 }
 
 type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   deleteUser(id: ID!): User
+  createAreaOffice(createAreaOfficeInput: CreateAreaOfficeInput): AreaOffice
+  updateAreaOffice(updateAreaOfficeInput: UpdateAreaOfficeInput): AreaOffice
+  createDesignation(createDesignationInput: CreateDesignationInput): Designation
+  updateDesignation(updateDesignationInput: UpdateDesignationInput): Designation
 }
 
 enum Role {
@@ -52,4 +122,9 @@ enum Role {
   Admin
   Mod
   User
+}
+
+enum SortOrder {
+  asc
+  desc
 }

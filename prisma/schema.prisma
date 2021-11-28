@@ -11,17 +11,47 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  username  String   @unique
-  staffId   String   @unique
-  password  String
-  role Role? @default(User)
+  id            String  @id @default(cuid())
+  email         String  @unique
+  username      String  @unique
+  staffId       String  @unique
+  password      String
+  role          Role    @default(User)
+  firstName     String?
+  lastName      String?
+  middleName    String?
+  designationId String?
+  areaOfficeId  String?
+  phoneNumber   String? @unique
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([id, email, username, staffId])
+  areaOffice  AreaOffice?   @relation(fields: [areaOfficeId], references: [id])
+  designation Designation? @relation(fields: [designationId], references: [id])
+
+  @@index([id, email, username, staffId, phoneNumber])
+}
+
+model AreaOffice {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  nercCode   String   @unique
+  kaedcoCode String   @unique
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user User[]
+
+  @@index([id, name])
+}
+
+model Designation {
+  id   String @id @default(cuid())
+  name String @unique
+  description String?
+
+  User User[]
 }
 
 enum Role {
