@@ -1,0 +1,37 @@
+scalar DateTime
+
+type AreaOffice {
+  id: String
+  name: String!
+  nercCode: String!
+  kaedcoCode: String!
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input CreateAreaOfficeInput {
+  name: String!
+  nercCode: String!
+  kaedcoCode: String!
+}
+
+input UpdateAreaOfficeInput {
+  id: String!
+  name: String
+  nercCode: String
+  kaedcoCode: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type Query {
+  areaOffices: [AreaOffice]!
+  areaOfficeById(id: String!): AreaOffice
+  areaOfficeByName(name: String): AreaOffice
+}
+
+type Mutation {
+  createAreaOffice(createAreaOfficeInput: CreateAreaOfficeInput!): AreaOffice!
+  updateAreaOffice(updateAreaOfficeInput: UpdateAreaOfficeInput!): AreaOffice!
+  removeAreaOffice(id: String!): AreaOffice
+}

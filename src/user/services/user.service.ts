@@ -43,13 +43,17 @@ export class UserService {
     const { field = 'createdAt', direction = 'desc' } = orderBy || {};
     return this.prismaService.user.findMany({
       orderBy: { [field]: direction },
+      include: { areaOffice: true, designation: true },
     });
   }
 
   async getUser(
     userWhereUniqueInput: Prisma.UserWhereUniqueInput,
   ): Promise<User | null> {
-    return this.prismaService.user.findUnique({ where: userWhereUniqueInput });
+    return this.prismaService.user.findUnique({
+      where: userWhereUniqueInput,
+      include: { areaOffice: true, designation: true },
+    });
   }
 
   async getUserByUsernameEmailStaffId(
@@ -71,6 +75,10 @@ export class UserService {
     return this.prismaService.user.update({
       where: { id: updateUserInput.id },
       data: updateUserInput,
+      include: {
+        areaOffice: true,
+        designation: true,
+      },
     });
   }
 

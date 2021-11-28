@@ -4,6 +4,7 @@ import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
 import { UserModule } from './user/user.module';
 import { GraphQLDateTime } from 'graphql-iso-date';
 import { AuthModule } from './auth/auth.module';
+import { AreaOfficeModule } from './area-office/area-office.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { AuthModule } from './auth/auth.module';
     }),
     UserModule,
     AuthModule,
+    AreaOfficeModule,
   ],
 })
 export class AppModule {}

@@ -19,6 +19,21 @@ export enum SortOrder {
     desc = "desc"
 }
 
+export class CreateAreaOfficeInput {
+    name: string;
+    nercCode: string;
+    kaedcoCode: string;
+}
+
+export class UpdateAreaOfficeInput {
+    id: string;
+    name?: Nullable<string>;
+    nercCode?: Nullable<string>;
+    kaedcoCode?: Nullable<string>;
+    createdAt?: Nullable<DateTime>;
+    updatedAt?: Nullable<DateTime>;
+}
+
 export class LoginInput {
     email?: Nullable<string>;
     username?: Nullable<string>;
@@ -62,23 +77,6 @@ export class UpdateUserInput {
     phoneNumber?: Nullable<string>;
 }
 
-export class CreateAreaOfficeInput {
-    name: string;
-    nercCode: string;
-    kaedcoCode: string;
-    createdAt?: Nullable<DateTime>;
-    updatedAt?: Nullable<DateTime>;
-}
-
-export class UpdateAreaOfficeInput {
-    id: string;
-    name?: Nullable<string>;
-    nercCode?: Nullable<string>;
-    kaedcoCode?: Nullable<string>;
-    createdAt?: Nullable<DateTime>;
-    updatedAt?: Nullable<DateTime>;
-}
-
 export class CreateDesignationInput {
     name: string;
     description?: Nullable<string>;
@@ -95,16 +93,44 @@ export class OrderByParams {
     direction?: Nullable<string>;
 }
 
-export class Auth {
-    token?: Nullable<number>;
+export class AreaOffice {
+    id?: Nullable<string>;
+    name: string;
+    nercCode: string;
+    kaedcoCode: string;
+    createdAt?: Nullable<DateTime>;
+    updatedAt?: Nullable<DateTime>;
 }
 
-export class AuthPayload {
-    token: string;
-    sub: string;
+export abstract class IQuery {
+    abstract areaOffices(): Nullable<AreaOffice>[] | Promise<Nullable<AreaOffice>[]>;
+
+    abstract areaOfficeById(id: string): Nullable<AreaOffice> | Promise<Nullable<AreaOffice>>;
+
+    abstract areaOfficeByName(name?: Nullable<string>): Nullable<AreaOffice> | Promise<Nullable<AreaOffice>>;
+
+    abstract users(orderBy?: Nullable<OrderByParams>): Nullable<User>[] | Promise<Nullable<User>[]>;
+
+    abstract userByID(id: string): Nullable<User> | Promise<Nullable<User>>;
+
+    abstract userByEmail(email: string): Nullable<User> | Promise<Nullable<User>>;
+
+    abstract userByUsername(username: string): Nullable<User> | Promise<Nullable<User>>;
+
+    abstract userByStaffId(staffId: string): Nullable<User> | Promise<Nullable<User>>;
+
+    abstract currentUser(user?: Nullable<UpdateUserInput>): Nullable<User> | Promise<Nullable<User>>;
+
+    abstract designations(orderBy?: Nullable<OrderByParams>): Nullable<Nullable<Designation>[]> | Promise<Nullable<Nullable<Designation>[]>>;
 }
 
 export abstract class IMutation {
+    abstract createAreaOffice(createAreaOfficeInput: CreateAreaOfficeInput): AreaOffice | Promise<AreaOffice>;
+
+    abstract updateAreaOffice(updateAreaOfficeInput: UpdateAreaOfficeInput): AreaOffice | Promise<AreaOffice>;
+
+    abstract removeAreaOffice(id: string): Nullable<AreaOffice> | Promise<Nullable<AreaOffice>>;
+
     abstract login(loginInput: LoginInput): AuthPayload | Promise<AuthPayload>;
 
     abstract signUp(signUpInput: SignUpInput): AuthPayload | Promise<AuthPayload>;
@@ -115,13 +141,18 @@ export abstract class IMutation {
 
     abstract deleteUser(id: string): Nullable<User> | Promise<Nullable<User>>;
 
-    abstract createAreaOffice(createAreaOfficeInput?: Nullable<CreateAreaOfficeInput>): Nullable<AreaOffice> | Promise<Nullable<AreaOffice>>;
-
-    abstract updateAreaOffice(updateAreaOfficeInput?: Nullable<UpdateAreaOfficeInput>): Nullable<AreaOffice> | Promise<Nullable<AreaOffice>>;
-
     abstract createDesignation(createDesignationInput?: Nullable<CreateDesignationInput>): Nullable<Designation> | Promise<Nullable<Designation>>;
 
     abstract updateDesignation(updateDesignationInput?: Nullable<UpdateDesignationInput>): Nullable<Designation> | Promise<Nullable<Designation>>;
+}
+
+export class Auth {
+    token?: Nullable<number>;
+}
+
+export class AuthPayload {
+    token: string;
+    sub: string;
 }
 
 export class User {
@@ -143,37 +174,10 @@ export class User {
     updatedAt?: Nullable<DateTime>;
 }
 
-export class AreaOffice {
-    id: string;
-    name: string;
-    nercCode: string;
-    kaedcoCode: string;
-    createdAt?: Nullable<DateTime>;
-    updatedAt?: Nullable<DateTime>;
-}
-
 export class Designation {
     id: string;
     name: string;
     description?: Nullable<string>;
-}
-
-export abstract class IQuery {
-    abstract users(orderBy?: Nullable<OrderByParams>): Nullable<User>[] | Promise<Nullable<User>[]>;
-
-    abstract userByID(id: string): Nullable<User> | Promise<Nullable<User>>;
-
-    abstract userByEmail(email: string): Nullable<User> | Promise<Nullable<User>>;
-
-    abstract userByUsername(username: string): Nullable<User> | Promise<Nullable<User>>;
-
-    abstract userByStaffId(staffId: string): Nullable<User> | Promise<Nullable<User>>;
-
-    abstract currentUser(user?: Nullable<UpdateUserInput>): Nullable<User> | Promise<Nullable<User>>;
-
-    abstract areaOffices(orderBy?: Nullable<OrderByParams>): Nullable<Nullable<AreaOffice>[]> | Promise<Nullable<Nullable<AreaOffice>[]>>;
-
-    abstract designations(orderBy?: Nullable<OrderByParams>): Nullable<Nullable<Designation>[]> | Promise<Nullable<Nullable<Designation>[]>>;
 }
 
 export type DateTime = any;

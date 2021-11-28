@@ -63,7 +63,6 @@ export class UserResolver {
     @Args('updateUserInput')
     params: UpdateUserInput,
   ) {
-    console.log('params', params);
     return this.userService.updateUser(params);
   }
 
