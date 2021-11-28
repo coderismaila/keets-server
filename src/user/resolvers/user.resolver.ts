@@ -20,11 +20,13 @@ export class UserResolver {
   constructor(private readonly userService: UserService) {}
 
   @Mutation('createUser')
+  @Roles(Role.Super, Role.Admin)
   createUser(@Args('createUserInput') createUserInput: CreateUserInput) {
     return this.userService.createUser(createUserInput);
   }
 
   @Query('users')
+  @Roles(Role.Super, Role.Admin)
   findAllUser(
     @Args('orderBy')
     params?: OrderByParams,
