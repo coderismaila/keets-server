@@ -5,6 +5,13 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator nestgraphql {
+    provider = "node node_modules/prisma-nestjs-graphql"
+    output = "../src/@generated/prisma-nestjs-graphql"
+    fields_Validator_from = "class-validator"
+    fields_Validator_input = true
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -12,7 +19,11 @@ datasource db {
 
 model User {
   id            String  @id @default(cuid())
+
+  /// @Validator.IsEmail()
   email         String  @unique
+
+  /// @Validator.MinLength(3)
   username      String  @unique
   staffId       String  @unique
   password      String
@@ -27,31 +38,62 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  areaOffice  AreaOffice?   @relation(fields: [areaOfficeId], references: [id])
+  areaOffice  AreaOffice?  @relation(fields: [areaOfficeId], references: [id])
   designation Designation? @relation(fields: [designationId], references: [id])
 
   @@index([id, email, username, staffId, phoneNumber])
 }
 
 model AreaOffice {
-  id          String   @id @default(cuid())
-  name        String   @unique
+  id         String   @id @default(cuid())
+  name       String   @unique
   nercCode   String   @unique
   kaedcoCode String   @unique
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
-  user User[]
+  user    User[]
+  station Station[]
 
   @@index([id, name])
 }
 
 model Designation {
-  id   String @id @default(cuid())
-  name String @unique
+  id          String  @id @default(cuid())
+  name        String  @unique
   description String?
 
   User User[]
+}
+
+model Station {
+  id           String      @id @default(cuid())
+  name         String      @unique
+  latitude     Float?      @db.Real
+  longitude    Float?      @db.Real
+  stationType  StationType 
+  nercCode     String?      @unique
+  kaedcoCode   String?      @unique
+  areaOfficeId String?
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  areaOffice AreaOffice? @relation(fields: [areaOfficeId], references: [id])
+
+  powerTransformer PowerTransformer[]
+}
+
+model PowerTransformer {
+  id          String @id @default(cuid())
+  name        String @unique
+  capacityKVA Float? @db.Real
+  stationId   String
+
+  station Station @relation(fields: [stationId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum Role {
@@ -59,4 +101,9 @@ enum Role {
   Admin
   Mod
   User
+}
+
+enum StationType {
+  Transmission
+  Distribution
 }

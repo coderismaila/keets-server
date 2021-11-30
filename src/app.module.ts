@@ -5,6 +5,7 @@ import { UserModule } from './user/user.module';
 import { GraphQLDateTime } from 'graphql-iso-date';
 import { AuthModule } from './auth/auth.module';
 import { AreaOfficeModule } from './area-office/area-office.module';
+import { TransmissionStationModule } from './station/station.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { AreaOfficeModule } from './area-office/area-office.module';
     UserModule,
     AuthModule,
     AreaOfficeModule,
+    TransmissionStationModule,
   ],
 })
 export class AppModule {}

@@ -1,0 +1,80 @@
+type Station {
+  id: String!
+  name: String!
+  latitude: Float
+  longitude: Float
+  stationType: StationType!
+  nercCode: String!
+  kaedcoCode: String!
+  areaOfficeId: String
+  areaOffice: AreaOffice
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input CreateStationInput {
+  name: String!
+  latitude: Float
+  longitude: Float
+  stationType: StationType
+  nercCode: String
+  kaedcoCode: String
+  areaOfficeId: String
+}
+
+input UpdateStationInput {
+  id: String
+  name: String
+  latitude: Float
+  longitude: Float
+  stationType: StationType
+  nercCode: String
+  kaedcoCode: String
+  areaOfficeId: String
+}
+
+type PowerTransformer {
+  id: String!
+  name: String!
+  capacityKVA: Float!
+  stationId: String!
+  station: Station
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input CreatePowerTransformerInput {
+  name: String!
+  capacityKVA: Float!
+  stationId: String!
+}
+
+input UpdatePowerTransformerInput {
+  id: String!
+  name: String
+  capacityKVA: Float
+  stationId: String
+}
+
+type Query {
+  stations: [Station]!
+  stationById(id: String!): Station
+  powerTransformers: [PowerTransformer]!
+  powerTransformerById(id: String!): PowerTransformer
+}
+
+type Mutation {
+  createStation(createStationInput: CreateStationInput!): Station!
+  updateStation(id: String!, updateStationInput: UpdateStationInput!): Station!
+  deleteStation(id: String!): Station
+
+  createPowerTransformer(
+    createStationPowerTransformerInput: CreatePowerTransformerInput!
+  ): PowerTransformer!
+  deletePowerTransformer(id: String!): PowerTransformer!
+}
+
+enum StationType {
+  Transmission
+  Distribution
+}

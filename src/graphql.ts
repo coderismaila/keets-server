@@ -7,6 +7,11 @@
 
 /* tslint:disable */
 /* eslint-disable */
+export enum StationType {
+    Transmission = "Transmission",
+    Distribution = "Distribution"
+}
+
 export enum Role {
     Super = "Super",
     Admin = "Admin",
@@ -46,6 +51,40 @@ export class SignUpInput {
     username: string;
     staffId: string;
     password: string;
+}
+
+export class CreateStationInput {
+    name: string;
+    latitude?: Nullable<number>;
+    longitude?: Nullable<number>;
+    stationType?: Nullable<StationType>;
+    nercCode?: Nullable<string>;
+    kaedcoCode?: Nullable<string>;
+    areaOfficeId?: Nullable<string>;
+}
+
+export class UpdateStationInput {
+    id?: Nullable<string>;
+    name?: Nullable<string>;
+    latitude?: Nullable<number>;
+    longitude?: Nullable<number>;
+    stationType?: Nullable<StationType>;
+    nercCode?: Nullable<string>;
+    kaedcoCode?: Nullable<string>;
+    areaOfficeId?: Nullable<string>;
+}
+
+export class CreatePowerTransformerInput {
+    name: string;
+    capacityKVA: number;
+    stationId: string;
+}
+
+export class UpdatePowerTransformerInput {
+    id: string;
+    name?: Nullable<string>;
+    capacityKVA?: Nullable<number>;
+    stationId?: Nullable<string>;
 }
 
 export class CreateUserInput {
@@ -109,6 +148,14 @@ export abstract class IQuery {
 
     abstract areaOfficeByName(name?: Nullable<string>): Nullable<AreaOffice> | Promise<Nullable<AreaOffice>>;
 
+    abstract stations(): Nullable<Station>[] | Promise<Nullable<Station>[]>;
+
+    abstract stationById(id: string): Nullable<Station> | Promise<Nullable<Station>>;
+
+    abstract powerTransformers(): Nullable<PowerTransformer>[] | Promise<Nullable<PowerTransformer>[]>;
+
+    abstract powerTransformerById(id: string): Nullable<PowerTransformer> | Promise<Nullable<PowerTransformer>>;
+
     abstract users(orderBy?: Nullable<OrderByParams>): Nullable<User>[] | Promise<Nullable<User>[]>;
 
     abstract userByID(id: string): Nullable<User> | Promise<Nullable<User>>;
@@ -135,6 +182,16 @@ export abstract class IMutation {
 
     abstract signUp(signUpInput: SignUpInput): AuthPayload | Promise<AuthPayload>;
 
+    abstract createStation(createStationInput: CreateStationInput): Station | Promise<Station>;
+
+    abstract updateStation(id: string, updateStationInput: UpdateStationInput): Station | Promise<Station>;
+
+    abstract deleteStation(id: string): Nullable<Station> | Promise<Nullable<Station>>;
+
+    abstract createPowerTransformer(createStationPowerTransformerInput: CreatePowerTransformerInput): PowerTransformer | Promise<PowerTransformer>;
+
+    abstract deletePowerTransformer(id: string): PowerTransformer | Promise<PowerTransformer>;
+
     abstract createUser(createUserInput: CreateUserInput): User | Promise<User>;
 
     abstract updateUser(updateUserInput: UpdateUserInput): User | Promise<User>;
@@ -153,6 +210,30 @@ export class Auth {
 export class AuthPayload {
     token: string;
     sub: string;
+}
+
+export class Station {
+    id: string;
+    name: string;
+    latitude?: Nullable<number>;
+    longitude?: Nullable<number>;
+    stationType: StationType;
+    nercCode: string;
+    kaedcoCode: string;
+    areaOfficeId?: Nullable<string>;
+    areaOffice?: Nullable<AreaOffice>;
+    createdAt?: Nullable<DateTime>;
+    updatedAt?: Nullable<DateTime>;
+}
+
+export class PowerTransformer {
+    id: string;
+    name: string;
+    capacityKVA: number;
+    stationId: string;
+    station?: Nullable<Station>;
+    createdAt?: Nullable<DateTime>;
+    updatedAt?: Nullable<DateTime>;
 }
 
 export class User {
